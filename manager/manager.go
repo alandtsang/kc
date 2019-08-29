@@ -67,3 +67,7 @@ func (kcm *KCManager) GetServiceAccounts() {
 func (kcm *KCManager) GetSecrets() {
 	kcm.resManager.GetSecrets(kcm.namespace)
 }
+
+func (kcm *KCManager) GetServices() {
+	kcm.resManager.GetServices(kcm.namespace)
+}
