@@ -33,7 +33,7 @@ func (p *Pods) Get() {
 			fmt.Printf("%-30s\t %s\t\t %s\t %-d\t\t %s\n", pod.ObjectMeta.Name, "1/1", getPodStatus(pod), 0, pod.ObjectMeta.CreationTimestamp)
 		}
 	} else {
-		fmt.Println("No resources found.")
+		fmt.Println(ERR_NO_RESOURCE)
 	}
 }
 

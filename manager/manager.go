@@ -51,3 +51,7 @@ func (kcm *KCManager) GetPods() {
 func (kcm *KCManager) GetConfigMaps() {
 	kcm.resManager.GetConfigMaps(kcm.namespace)
 }
+
+func (kcm *KCManager) GetEndPoints() {
+	kcm.resManager.GetEndPoints(kcm.namespace)
+}

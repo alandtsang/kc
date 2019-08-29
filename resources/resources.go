@@ -2,10 +2,13 @@ package resources
 
 import "github.com/alandtsang/kc/clientset"
 
+const ERR_NO_RESOURCE string = "No resources found."
+
 type ResourcesManager struct {
 	rs     *Resources
 	client *clientset.Client
 }
+
 type Resources struct {
 	namespaces *Namespaces
 	nodes      *Nodes
@@ -34,4 +37,9 @@ func (rsm *ResourcesManager) GetPods(namespace string) {
 func (rsm *ResourcesManager) GetConfigMaps(namespace string) {
 	rsm.rs.configMaps = NewConfigMaps(rsm.client.ClientSet, namespace)
 	rsm.rs.configMaps.Get()
+}
+
+func (rsm *ResourcesManager) GetEndPoints(namespace string) {
+	rsm.rs.ep = NewEndPoints(rsm.client.ClientSet, namespace)
+	rsm.rs.ep.Get()
 }

@@ -28,6 +28,6 @@ func (cm *ConfigMaps) Get() {
 			fmt.Printf("%-24s %d\t %s\n", configMap.Name, len(configMap.Data), configMap.CreationTimestamp)
 		}
 	} else {
-		fmt.Println("No resources found.")
+		fmt.Println(ERR_NO_RESOURCE)
 	}
 }
