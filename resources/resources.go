@@ -1,10 +1,15 @@
 package resources
 
-import "github.com/alandtsang/kc/clientset"
+import (
+	"log"
+
+	"github.com/alandtsang/kc/clientset"
+)
 
 const ERR_NO_RESOURCE string = "No resources found."
 
 var ResourcesLists = map[string]bool{
+	"ns":   true,
 	"node": true,
 	"pod":  true,
 	"svc":  true,
@@ -14,62 +19,44 @@ var ResourcesLists = map[string]bool{
 	"ep":   true,
 }
 
+type Resourcer interface {
+	Get()
+}
+
+func NewResourcesManager(client *clientset.Client, namespace, resource, name string) *ResourcesManager {
+	rss := NewResource(client, namespace, resource)
+	return &ResourcesManager{rss: rss}
+}
+
+func NewResource(client *clientset.Client, namespace, resource string) Resourcer {
+	var resourcer Resourcer
+	switch resource {
+	case "ns":
+		resourcer = NewNamespaces(client.ClientSet)
+	case "node":
+		resourcer = NewNodes(client.ClientSet)
+	case "pod":
+		resourcer = NewPods(client.ClientSet, namespace)
+	case "svc":
+		resourcer = NewPods(client.ClientSet, namespace)
+	case "sa":
+		resourcer = NewPods(client.ClientSet, namespace)
+	case "sec":
+		resourcer = NewPods(client.ClientSet, namespace)
+	case "cm":
+		resourcer = NewPods(client.ClientSet, namespace)
+	case "ep":
+		resourcer = NewPods(client.ClientSet, namespace)
+	default:
+		log.Fatal("[Error] NewResource")
+	}
+	return resourcer
+}
+
 type ResourcesManager struct {
-	rs     *Resources
-	client *clientset.Client
+	rss Resourcer
 }
 
-type Resources struct {
-	namespaces *Namespaces
-	nodes      *Nodes
-	pods       *Pods
-	svcs       *Services
-	sa         *ServiceAccounts
-	secret     *Secrets
-	configMaps *ConfigMaps
-	ep         *EndPoints
-}
-
-func NewResourcesManager(client *clientset.Client) *ResourcesManager {
-	return &ResourcesManager{rs: &Resources{}, client: client}
-}
-
-func (rsm *ResourcesManager) GetNamespaces() {
-	rsm.rs.namespaces = NewNamespaces(rsm.client.ClientSet)
-	rsm.rs.namespaces.Get()
-}
-
-func (rsm *ResourcesManager) GetPods(namespace string) {
-	rsm.rs.pods = NewPods(rsm.client.ClientSet, namespace)
-	rsm.rs.pods.Get()
-}
-
-func (rsm *ResourcesManager) GetConfigMaps(namespace string) {
-	rsm.rs.configMaps = NewConfigMaps(rsm.client.ClientSet, namespace)
-	rsm.rs.configMaps.Get()
-}
-
-func (rsm *ResourcesManager) GetEndPoints(namespace string) {
-	rsm.rs.ep = NewEndPoints(rsm.client.ClientSet, namespace)
-	rsm.rs.ep.Get()
-}
-
-func (rsm *ResourcesManager) GetNodes() {
-	rsm.rs.nodes = NewNodes(rsm.client.ClientSet)
-	rsm.rs.nodes.Get()
-}
-
-func (rsm *ResourcesManager) GetServiceAccounts(namespace string) {
-	rsm.rs.sa = NewServiceAccounts(rsm.client.ClientSet, namespace)
-	rsm.rs.sa.Get()
-}
-
-func (rsm *ResourcesManager) GetSecrets(namespace string) {
-	rsm.rs.secret = NewSecrets(rsm.client.ClientSet, namespace)
-	rsm.rs.secret.Get()
-}
-
-func (rsm *ResourcesManager) GetServices(namespace string) {
-	rsm.rs.svcs = NewServices(rsm.client.ClientSet, namespace)
-	rsm.rs.svcs.Get()
+func (rsm *ResourcesManager) Get() {
+	rsm.rss.Get()
 }

@@ -83,19 +83,22 @@ var getCmd = &cobra.Command{
 		namespace, _ := cmd.Flags().GetString("namespace")
 		getArgs := cmd.Flags().Args()
 		validate(getArgs)
-		do(namespace, getArgs[0], getArgs[1])
+		do(namespace, getArgs)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(getCmd)
 	getCmd.Flags().StringP("namespace", "n", "default", "help for namespace")
-	getCmd.Flags().StringP("pod", "p", "", "help for pod")
+	getCmd.Flags().StringP("output", "o", "", "help for output")
 }
 
 func validate(args []string) {
-	if len(args) != 2 {
+	argsLen := len(args)
+	if argsLen == 0 {
 		log.Fatalln("[Error] Empty resource names are not allowed")
+	} else if argsLen > 2 {
+		log.Fatalln("[Error] Too many parameters are not allowed")
 	}
 
 	if _, ok := resources.ResourcesLists[args[0]]; !ok {
@@ -103,10 +106,15 @@ func validate(args []string) {
 	}
 }
 
-func do(namespace, resource, name string) {
+func do(namespace string, args []string) {
+	var resource, name string
+	resource = args[0]
+	if len(args) == 2 {
+		name = args[1]
+	}
 	fmt.Println(namespace, resource, name)
 	clusterName := "k8s-test2"
 	var kcmanager manager.KCManager
-	kcmanager.Init(clusterName, namespace)
-	kcmanager.GetPods()
+	kcmanager.Init(clusterName, namespace, resource, name)
+	kcmanager.GetResource()
 }

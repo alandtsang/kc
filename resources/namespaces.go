@@ -12,7 +12,7 @@ type Namespaces struct {
 	clientSet *kubernetes.Clientset
 }
 
-func NewNamespaces(clientSet *kubernetes.Clientset) *Namespaces {
+func NewNamespaces(clientSet *kubernetes.Clientset) Resourcer {
 	return &Namespaces{clientSet: clientSet}
 }
 
