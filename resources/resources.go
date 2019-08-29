@@ -4,6 +4,16 @@ import "github.com/alandtsang/kc/clientset"
 
 const ERR_NO_RESOURCE string = "No resources found."
 
+var ResourcesLists = map[string]bool{
+	"node": true,
+	"pod":  true,
+	"svc":  true,
+	"sec":  true,
+	"sa":   true,
+	"cm":   true,
+	"ep":   true,
+}
+
 type ResourcesManager struct {
 	rs     *Resources
 	client *clientset.Client

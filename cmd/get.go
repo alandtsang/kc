@@ -17,41 +17,96 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
+	"github.com/alandtsang/kc/manager"
+	"github.com/alandtsang/kc/resources"
 	"github.com/spf13/cobra"
 )
 
-// getCmd represents the get command
-var getCmd = &cobra.Command{
-	Use:   "get",
-	Short: "A brief description of your command",
-	Long: `Display one or many resources
+var (
+	getLong = `
+Display one or many resources
 
-Prints a table of the most important information about the specified resources. You can filter the list using a label
-selector and the --selector flag. If the desired resource type is namespaced you will only see results in your current
+Prints a table of the most important information about the specified resources.
+You can filter the list using a label selector and the --selector flag. If the
+desired resource type is namespaced you will only see results in your current
 namespace unless you pass --all-namespaces.
 
 Uninitialized objects are not shown unless --include-uninitialized is passed.
 
-By specifying the output as 'template' and providing a Go template as the value of the --template flag, you can filter
-the attributes of the fetched resources.
+By specifying the output as 'template' and providing a Go template as the value
+of the --template flag, you can filter the attributes of the fetched resources.`
 
-Use "kubectl api-resources" for a complete list of supported resources.`,
+	getExample = `
+  # List all pods in ps output format.
+  kubectl get pods
+
+  # List all pods in ps output format with more information (such as node name).
+  kubectl get pods -o wide
+
+  # List a single replication controller with specified NAME in ps output format.
+  kubectl get replicationcontroller web
+
+  # List deployments in JSON output format, in the "v1" version of the "apps" API group:
+  kubectl get deployments.v1.apps -o json
+
+  # List a single pod in JSON output format.
+  kubectl get -o json pod web-pod-13je7
+
+  # List a pod identified by type and name specified in "pod.yaml" in JSON output format.
+  kubectl get -f pod.yaml -o json
+
+  # List resources from a directory with kustomization.yaml - e.g. dir/kustomization.yaml.
+  kubectl get -k dir/
+
+  # Return only the phase value of the specified pod.
+  kubectl get -o template pod/web-pod-13je7 --template={{.status.phase}}
+
+  # List resource information in custom columns.
+  kubectl get pod test-pod -o custom-columns=CONTAINER:.spec.containers[0].name,IMAGE:.spec.containers[0].image
+
+  # List all replication controllers and services together in ps output format.
+  kubectl get rc,services
+
+  # List one or more resources by their type and names.
+  kubectl get rc/web service/frontend pods/web-pod-13je7`
+)
+
+// getCmd represents the get command
+var getCmd = &cobra.Command{
+	Use:     "get",
+	Short:   "Display one or many resources",
+	Long:    getLong,
+	Example: getExample,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("get called")
+		namespace, _ := cmd.Flags().GetString("namespace")
+		getArgs := cmd.Flags().Args()
+		validate(getArgs)
+		do(namespace, getArgs[0], getArgs[1])
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(getCmd)
+	getCmd.Flags().StringP("namespace", "n", "default", "help for namespace")
+	getCmd.Flags().StringP("pod", "p", "", "help for pod")
+}
 
-	// Here you will define your flags and configuration settings.
+func validate(args []string) {
+	if len(args) != 2 {
+		log.Fatalln("[Error] Empty resource names are not allowed")
+	}
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// getCmd.PersistentFlags().String("foo", "", "A help for foo")
+	if _, ok := resources.ResourcesLists[args[0]]; !ok {
+		log.Fatalf("[Error] Resource name %s are not allowed\n", args[0])
+	}
+}
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+func do(namespace, resource, name string) {
+	fmt.Println(namespace, resource, name)
+	clusterName := "k8s-test2"
+	var kcmanager manager.KCManager
+	kcmanager.Init(clusterName, namespace)
+	kcmanager.GetPods()
 }
