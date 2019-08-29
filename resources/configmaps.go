@@ -7,6 +7,9 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+type ConfigMaps struct {
+}
+
 func GetConfigMaps(clientset *kubernetes.Clientset) {
 	namespace := "logging"
 	configMaps, err := clientset.CoreV1().ConfigMaps(namespace).List(metav1.ListOptions{})

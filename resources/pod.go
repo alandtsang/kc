@@ -8,6 +8,9 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+type Pods struct {
+}
+
 func GetPods(clientset *kubernetes.Clientset) {
 	// 通过实现 clientset 的 CoreV1Interface 接口列表中的 PodsGetter 接口方法 Pods(namespace string)返回 PodInterface
 	// PodInterface 接口拥有操作 Pod 资源的方法，例如 Create、Update、Get、List 等方法

@@ -7,6 +7,9 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+type ServiceAccounts struct {
+}
+
 func GetServiceAccounts(clientset *kubernetes.Clientset) {
 	namespace := "default"
 	serviceAccounts, err := clientset.CoreV1().ServiceAccounts(namespace).List(metav1.ListOptions{})

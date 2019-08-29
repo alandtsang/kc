@@ -3,14 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
-
-	"github.com/alandtsang/kc/clusters"
-	"github.com/alandtsang/kc/resources"
+	"github.com/alandtsang/kc/manager"
 )
 
 // 实际中应该用更好的变量名
@@ -75,41 +70,8 @@ func main() {
 		flag.Usage()
 	}
 
-	var cs clusters.ClusterSet
-	cs.Init()
-	//cs.Print()
+	var kcmanager manager.KCManager
 	clusterName := "k8s-test2"
-	cluster := cs.GetCluster(clusterName)
-	if cluster == nil {
-		log.Fatalf("[Error] Cluster name %s not found, please enter the correct name\n", clusterName)
-	}
-	//fmt.Printf("%+v\n", *cluster)
-	clientset := GetClient(newConfig(cluster.Addr, cluster.Token))
-	//resources.GetNamespaces(clientset)
-	//resources.GetPods(clientset)
-	//resources.GetService(clientset)
-	//resources.GetConfigMaps(clientset)
-	//resources.GetNodes(clientset)
-	//resources.GetEndPoints(clientset)
-	//resources.GetSecrets(clientset)
-	resources.GetServiceAccounts(clientset)
-}
-
-func newConfig(host, token string) *rest.Config {
-	// uses the current context in kubeconfig
-	config := &rest.Config{
-		Host:            host,
-		BearerToken:     token,
-		TLSClientConfig: rest.TLSClientConfig{Insecure: true},
-	}
-	return config
-}
-
-func GetClient(config *rest.Config) *kubernetes.Clientset {
-	// 根据指定的 config 创建一个新的 clientset
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		panic(err.Error())
-	}
-	return clientset
+	kcmanager.Init(clusterName)
+	kcmanager.GetNamespaces()
 }

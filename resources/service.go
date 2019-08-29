@@ -7,6 +7,9 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+type Services struct {
+}
+
 func GetService(clientset *kubernetes.Clientset) {
 	namespace := "default"
 	services, err := clientset.CoreV1().Services(namespace).List(metav1.ListOptions{})

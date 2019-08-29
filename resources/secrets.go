@@ -7,6 +7,9 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+type Secrets struct {
+}
+
 func GetSecrets(clientset *kubernetes.Clientset) {
 	namespace := "default"
 	secrets, err := clientset.CoreV1().Secrets(namespace).List(metav1.ListOptions{})

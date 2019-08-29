@@ -18,9 +18,11 @@ type ClusterSet struct {
 	c map[string]*Cluster
 }
 
-func (cs *ClusterSet) Init() {
+func NewClusterSet() *ClusterSet {
+	var cs ClusterSet
 	cs.c = make(map[string]*Cluster)
 	cs.Update()
+	return &cs
 }
 
 func (cs *ClusterSet) Update() {

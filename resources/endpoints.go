@@ -8,6 +8,9 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+type EndPoints struct {
+}
+
 func GetEndPoints(clientset *kubernetes.Clientset) {
 	namespace := "default"
 	endpoints, err := clientset.CoreV1().Endpoints(namespace).List(metav1.ListOptions{})

@@ -7,6 +7,9 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+type Nodes struct {
+}
+
 func GetNodes(clientset *kubernetes.Clientset) {
 	nodes, err := clientset.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {

@@ -8,8 +8,16 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func GetNamespaces(clientset *kubernetes.Clientset) {
-	namespaces, err := clientset.CoreV1().Namespaces().List(metav1.ListOptions{})
+type Namespaces struct {
+	clientSet *kubernetes.Clientset
+}
+
+func NewNamespaces(clientSet *kubernetes.Clientset) *Namespaces {
+	return &Namespaces{clientSet: clientSet}
+}
+
+func (n *Namespaces) GetNamespaces() {
+	namespaces, err := n.clientSet.CoreV1().Namespaces().List(metav1.ListOptions{})
 	if err != nil {
 		log.Fatalf("[Error] GetNamespaces() failed: %s\n", err.Error())
 	}

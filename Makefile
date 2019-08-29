@@ -38,7 +38,7 @@ vet:
 	@go vet $(VETPACKAGES)
 
 docker:
-    @docker build -t aland/example:latest .
+	@docker build -t aland/example:latest .
 
 clean:
 	@rm -f ${BINARY}
