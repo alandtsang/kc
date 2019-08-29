@@ -72,8 +72,10 @@ func main() {
 
 	var kcmanager manager.KCManager
 	clusterName := "k8s-test2"
-	kcmanager.Init(clusterName)
-	//kcmanager.GetNamespaces()
 	namespace := ""
-	kcmanager.GetPods(namespace)
+	kcmanager.Init(clusterName, namespace)
+
+	//kcmanager.GetNamespaces()
+	//kcmanager.GetPods()
+	//kcmanager.GetConfigMaps()
 }

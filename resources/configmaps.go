@@ -8,16 +8,26 @@ import (
 )
 
 type ConfigMaps struct {
+	clientSet *kubernetes.Clientset
+	namespace string
 }
 
-func GetConfigMaps(clientset *kubernetes.Clientset) {
-	namespace := "logging"
-	configMaps, err := clientset.CoreV1().ConfigMaps(namespace).List(metav1.ListOptions{})
+func NewConfigMaps(clientSet *kubernetes.Clientset, namespace string) *ConfigMaps {
+	return &ConfigMaps{clientSet: clientSet, namespace: namespace}
+}
+
+func (cm *ConfigMaps) Get() {
+	configMaps, err := cm.clientSet.CoreV1().ConfigMaps(cm.namespace).List(metav1.ListOptions{})
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("NAME\t\t\t DATA\t AGE\n")
-	for _, configMap := range configMaps.Items {
-		fmt.Printf("%-24s %d\t %s\n", configMap.Name, len(configMap.Data), configMap.CreationTimestamp)
+
+	if len(configMaps.Items) > 0 {
+		fmt.Printf("NAME\t\t\t DATA\t AGE\n")
+		for _, configMap := range configMaps.Items {
+			fmt.Printf("%-24s %d\t %s\n", configMap.Name, len(configMap.Data), configMap.CreationTimestamp)
+		}
+	} else {
+		fmt.Println("No resources found.")
 	}
 }

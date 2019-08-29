@@ -27,9 +27,11 @@ func (rsm *ResourcesManager) GetNamespaces() {
 }
 
 func (rsm *ResourcesManager) GetPods(namespace string) {
-	if len(namespace) == 0 {
-		namespace = "default"
-	}
 	rsm.rs.pods = NewPods(rsm.client.ClientSet, namespace)
 	rsm.rs.pods.Get()
+}
+
+func (rsm *ResourcesManager) GetConfigMaps(namespace string) {
+	rsm.rs.configMaps = NewConfigMaps(rsm.client.ClientSet, namespace)
+	rsm.rs.configMaps.Get()
 }
