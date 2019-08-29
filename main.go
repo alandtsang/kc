@@ -80,5 +80,6 @@ func main() {
 	//kcmanager.GetConfigMaps()
 	//kcmanager.GetEndPoints()
 	//kcmanager.GetNodes()
-	kcmanager.GetServiceAccounts()
+	//kcmanager.GetServiceAccounts()
+	kcmanager.GetSecrets()
 }

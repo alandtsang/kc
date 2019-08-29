@@ -53,3 +53,8 @@ func (rsm *ResourcesManager) GetServiceAccounts(namespace string) {
 	rsm.rs.sa = NewServiceAccounts(rsm.client.ClientSet, namespace)
 	rsm.rs.sa.Get()
 }
+
+func (rsm *ResourcesManager) GetSecrets(namespace string) {
+	rsm.rs.secret = NewSecrets(rsm.client.ClientSet, namespace)
+	rsm.rs.secret.Get()
+}

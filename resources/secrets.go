@@ -8,17 +8,26 @@ import (
 )
 
 type Secrets struct {
+	clientSet *kubernetes.Clientset
+	namespace string
 }
 
-func GetSecrets(clientset *kubernetes.Clientset) {
-	namespace := "default"
-	secrets, err := clientset.CoreV1().Secrets(namespace).List(metav1.ListOptions{})
+func NewSecrets(clientSet *kubernetes.Clientset, namespace string) *Secrets {
+	return &Secrets{clientSet: clientSet, namespace: namespace}
+}
+
+func (s *Secrets) Get() {
+	secrets, err := s.clientSet.CoreV1().Secrets(s.namespace).List(metav1.ListOptions{})
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("NAME\t\t\t TYPE\t\t\t\t\t DATA\t AGE\n")
-	for _, secret := range secrets.Items {
-		fmt.Printf("%-24s %s\t %d\t %s\n", secret.Name, secret.Type, len(secret.Data), secret.CreationTimestamp)
+	if len(secrets.Items) > 0 {
+		fmt.Printf("NAME\t\t\t TYPE\t\t\t\t\t DATA\t AGE\n")
+		for _, secret := range secrets.Items {
+			fmt.Printf("%-24s %s\t %d\t %s\n", secret.Name, secret.Type, len(secret.Data), secret.CreationTimestamp)
+		}
+	} else {
+		fmt.Println(ERR_NO_RESOURCE)
 	}
 }
