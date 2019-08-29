@@ -79,5 +79,6 @@ func main() {
 	//kcmanager.GetPods()
 	//kcmanager.GetConfigMaps()
 	//kcmanager.GetEndPoints()
-	kcmanager.GetNodes()
+	//kcmanager.GetNodes()
+	kcmanager.GetServiceAccounts()
 }

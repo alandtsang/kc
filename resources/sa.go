@@ -8,17 +8,26 @@ import (
 )
 
 type ServiceAccounts struct {
+	clientSet *kubernetes.Clientset
+	namespace string
 }
 
-func GetServiceAccounts(clientset *kubernetes.Clientset) {
-	namespace := "default"
-	serviceAccounts, err := clientset.CoreV1().ServiceAccounts(namespace).List(metav1.ListOptions{})
+func NewServiceAccounts(clientSet *kubernetes.Clientset, namespace string) *ServiceAccounts {
+	return &ServiceAccounts{clientSet: clientSet, namespace: namespace}
+}
+
+func (sa *ServiceAccounts) Get() {
+	serviceAccounts, err := sa.clientSet.CoreV1().ServiceAccounts(sa.namespace).List(metav1.ListOptions{})
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("NAME\t\t\t SECRETS\t AGE\n")
-	for _, sa := range serviceAccounts.Items {
-		fmt.Printf("%-24s %d\t %s\n", sa.Name, len(sa.Secrets), sa.CreationTimestamp)
+	if len(serviceAccounts.Items) > 0 {
+		fmt.Printf("NAME\t\t\t SECRETS\t AGE\n")
+		for _, sa := range serviceAccounts.Items {
+			fmt.Printf("%-24s %d\t %s\n", sa.Name, len(sa.Secrets), sa.CreationTimestamp)
+		}
+	} else {
+		fmt.Println(ERR_NO_RESOURCE)
 	}
 }

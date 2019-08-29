@@ -59,3 +59,7 @@ func (kcm *KCManager) GetEndPoints() {
 func (kcm *KCManager) GetNodes() {
 	kcm.resManager.GetNodes()
 }
+
+func (kcm *KCManager) GetServiceAccounts() {
+	kcm.resManager.GetServiceAccounts(kcm.namespace)
+}

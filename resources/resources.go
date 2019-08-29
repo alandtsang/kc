@@ -48,3 +48,8 @@ func (rsm *ResourcesManager) GetNodes() {
 	rsm.rs.nodes = NewNodes(rsm.client.ClientSet)
 	rsm.rs.nodes.Get()
 }
+
+func (rsm *ResourcesManager) GetServiceAccounts(namespace string) {
+	rsm.rs.sa = NewServiceAccounts(rsm.client.ClientSet, namespace)
+	rsm.rs.sa.Get()
+}
