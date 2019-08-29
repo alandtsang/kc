@@ -23,5 +23,13 @@ func NewResourcesManager(client *clientset.Client) *ResourcesManager {
 
 func (rsm *ResourcesManager) GetNamespaces() {
 	rsm.rs.namespaces = NewNamespaces(rsm.client.ClientSet)
-	rsm.rs.namespaces.GetNamespaces()
+	rsm.rs.namespaces.Get()
+}
+
+func (rsm *ResourcesManager) GetPods(namespace string) {
+	if len(namespace) == 0 {
+		namespace = "default"
+	}
+	rsm.rs.pods = NewPods(rsm.client.ClientSet, namespace)
+	rsm.rs.pods.Get()
 }

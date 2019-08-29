@@ -16,7 +16,7 @@ func NewNamespaces(clientSet *kubernetes.Clientset) *Namespaces {
 	return &Namespaces{clientSet: clientSet}
 }
 
-func (n *Namespaces) GetNamespaces() {
+func (n *Namespaces) Get() {
 	namespaces, err := n.clientSet.CoreV1().Namespaces().List(metav1.ListOptions{})
 	if err != nil {
 		log.Fatalf("[Error] GetNamespaces() failed: %s\n", err.Error())

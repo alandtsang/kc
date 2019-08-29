@@ -9,21 +9,21 @@ import (
 )
 
 type Pods struct {
+	clientSet *kubernetes.Clientset
+	namespace string
 }
 
-func GetPods(clientset *kubernetes.Clientset) {
+func NewPods(clientSet *kubernetes.Clientset, namespace string) *Pods {
+	return &Pods{clientSet: clientSet, namespace: namespace}
+}
+
+func (p *Pods) Get() {
 	// 通过实现 clientset 的 CoreV1Interface 接口列表中的 PodsGetter 接口方法 Pods(namespace string)返回 PodInterface
 	// PodInterface 接口拥有操作 Pod 资源的方法，例如 Create、Update、Get、List 等方法
-	// 注意：Pods() 方法中 namespace 不指定则获取 Cluster 所有 Pod 列表
-	pods, err := clientset.CoreV1().Pods("").List(metav1.ListOptions{})
-	if err != nil {
-		panic(err.Error())
-	}
-	//fmt.Printf("There are %d pods in the k8s cluster\n", len(pods.Items))
 
-	// 获取指定 namespace 中的 Pod 列表信息
-	namespace := "default"
-	pods, err = clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{})
+	// 注意：Pods() 方法中 namespace 不指定则获取 Cluster 所有 namespace 的 Pod 列表
+	// 若指定 namespace 则获取指定 Pod 列表信息
+	pods, err := p.clientSet.CoreV1().Pods(p.namespace).List(metav1.ListOptions{})
 	if err != nil {
 		panic(err)
 	}

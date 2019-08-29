@@ -37,3 +37,7 @@ func (kcm *KCManager) Init(clusterName string) {
 func (kcm *KCManager) GetNamespaces() {
 	kcm.resManager.GetNamespaces()
 }
+
+func (kcm *KCManager) GetPods(namespace string) {
+	kcm.resManager.GetPods(namespace)
+}
