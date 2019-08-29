@@ -43,3 +43,8 @@ func (rsm *ResourcesManager) GetEndPoints(namespace string) {
 	rsm.rs.ep = NewEndPoints(rsm.client.ClientSet, namespace)
 	rsm.rs.ep.Get()
 }
+
+func (rsm *ResourcesManager) GetNodes() {
+	rsm.rs.nodes = NewNodes(rsm.client.ClientSet)
+	rsm.rs.nodes.Get()
+}

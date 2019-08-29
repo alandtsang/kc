@@ -55,3 +55,7 @@ func (kcm *KCManager) GetConfigMaps() {
 func (kcm *KCManager) GetEndPoints() {
 	kcm.resManager.GetEndPoints(kcm.namespace)
 }
+
+func (kcm *KCManager) GetNodes() {
+	kcm.resManager.GetNodes()
+}

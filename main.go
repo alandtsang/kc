@@ -78,5 +78,6 @@ func main() {
 	//kcmanager.GetNamespaces()
 	//kcmanager.GetPods()
 	//kcmanager.GetConfigMaps()
-	kcmanager.GetEndPoints()
+	//kcmanager.GetEndPoints()
+	kcmanager.GetNodes()
 }
