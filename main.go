@@ -9,8 +9,8 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 
+	"github.com/alandtsang/kc/clusters"
 	"github.com/alandtsang/kc/resources"
-	"github.com/alandtsang/kc/resourceset"
 )
 
 // 实际中应该用更好的变量名
@@ -55,7 +55,7 @@ func init() {
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, `kubectl controls the Kubernetes cluster manager.
+	fmt.Fprintf(os.Stderr, `kc controls the Kubernetes cluster manager.
 
 Usage: nginx [-hvVtTq] [-s signal] [-c filename] [-p prefix] [-g directives]
 
@@ -75,25 +75,24 @@ func main() {
 		flag.Usage()
 	}
 
-	var rs resourceset.ResourceSet
-	rs.Init()
-	//rs.Print()
-	name := "k8s-test2"
-	resource := rs.GetResource(name)
-	if resource == nil {
-		log.Fatalf("Error: ResoureSet %s not found, Please enter the correct name.\n", name)
+	var cs clusters.ClusterSet
+	cs.Init()
+	//cs.Print()
+	clusterName := "k8s-test2"
+	cluster := cs.GetCluster(clusterName)
+	if cluster == nil {
+		log.Fatalf("[Error] Cluster name %s not found, please enter the correct name\n", clusterName)
 	}
-	//fmt.Printf("%+v\n", *resource)
-	clientset := GetClient(newConfig(resource.Addr, resource.Token))
-	//resources.GetNamespace(clientset)
-	//resources.GetPod(clientset)
+	//fmt.Printf("%+v\n", *cluster)
+	clientset := GetClient(newConfig(cluster.Addr, cluster.Token))
+	//resources.GetNamespaces(clientset)
+	//resources.GetPods(clientset)
 	//resources.GetService(clientset)
 	//resources.GetConfigMaps(clientset)
 	//resources.GetNodes(clientset)
 	//resources.GetEndPoints(clientset)
 	//resources.GetSecrets(clientset)
 	resources.GetServiceAccounts(clientset)
-
 }
 
 func newConfig(host, token string) *rest.Config {

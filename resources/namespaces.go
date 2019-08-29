@@ -2,6 +2,7 @@ package resources
 
 import (
 	"fmt"
+	"log"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -10,7 +11,7 @@ import (
 func GetNamespaces(clientset *kubernetes.Clientset) {
 	namespaces, err := clientset.CoreV1().Namespaces().List(metav1.ListOptions{})
 	if err != nil {
-		panic(err.Error())
+		log.Fatalf("[Error] GetNamespaces() failed: %s\n", err.Error())
 	}
 
 	fmt.Printf("NAME\t\t\t\t STATUS\t\t AGE\n")
