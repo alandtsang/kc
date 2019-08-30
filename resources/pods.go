@@ -1,7 +1,9 @@
 package resources
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"log"
 
 	v1 "k8s.io/api/core/v1"
@@ -20,12 +22,28 @@ func NewPods(clientSet *kubernetes.Clientset, namespace, name string) *Pods {
 }
 
 func (p *Pods) Get() {
-
 	if len(p.name) > 0 {
 		p.getPod()
 	} else {
 		p.getPodList()
 	}
+}
+
+func (p *Pods) GetLogs() {
+	req := p.clientSet.CoreV1().Pods(p.namespace).GetLogs(p.name, &v1.PodLogOptions{})
+	podLogs, err := req.Stream()
+	if err != nil {
+		log.Fatalln("[Error] Logs()", err.Error())
+	}
+	defer podLogs.Close()
+
+	buf := new(bytes.Buffer)
+	_, err = io.Copy(buf, podLogs)
+	if err != nil {
+		log.Fatalln("[Error] Logs()", err.Error())
+	}
+	str := buf.String()
+	fmt.Println(str)
 }
 
 func (p *Pods) getPod() {

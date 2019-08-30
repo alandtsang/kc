@@ -19,6 +19,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/alandtsang/kc/manager"
+	"github.com/alandtsang/kc/resources"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -85,4 +87,12 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+func NewKCManager(action resources.Action, namespace, resource, name string) {
+	fmt.Printf("action: %v, namespace: %s, resource: %s, name: %s\n", action, namespace, resource, name)
+	clusterName := "k8s-test2"
+	var kcmanager manager.KCManager
+	kcmanager.Init(action, clusterName, namespace, resource, name)
+	kcmanager.Do()
 }

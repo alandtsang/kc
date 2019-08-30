@@ -16,10 +16,8 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
 	"log"
 
-	"github.com/alandtsang/kc/manager"
 	"github.com/alandtsang/kc/resources"
 	"github.com/spf13/cobra"
 )
@@ -112,9 +110,5 @@ func do(namespace string, args []string) {
 	if len(args) == 2 {
 		name = args[1]
 	}
-	fmt.Println(namespace, resource, name)
-	clusterName := "k8s-test2"
-	var kcmanager manager.KCManager
-	kcmanager.Init(clusterName, namespace, resource, name)
-	kcmanager.GetResource()
+	NewKCManager(resources.ActionGet, namespace, resource, name)
 }

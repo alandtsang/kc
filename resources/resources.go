@@ -8,6 +8,51 @@ import (
 
 const ERR_NO_RESOURCE string = "No resources found."
 
+type Action int
+
+const (
+	ActionCreate Action = iota
+	ActionExpose
+	ActionRun
+	ActionSet
+	ActionExplain
+	ActionGet
+	ActionEdit
+	ActionDelete
+	ActionRollout
+	ActionScale
+	ActionAutoscale
+	ActionCertificate
+	ActionClusterInfo
+	ActionTop
+	ActionCordon
+	ActionUncordon
+	ActionDrain
+	ActionTaint
+	ActionDescribe
+	ActionLogs
+	ActionAttach
+	ActionExec
+	ActionPortForward
+	ActionProxy
+	ActionCp
+	ActionAuth
+	ActionApply
+	ActionPatch
+	ActionReplace
+	ActionWait
+	ActionConvert
+	ActionLabel
+	ActionAnnotate
+	ActionCompletion
+	ActionAlpha
+	ActionApiResources
+	ActionApiVersions
+	ActionConfig
+	ActionPlugin
+	ActionVersion
+)
+
 var ResourcesLists = map[string]bool{
 	"ns":   true,
 	"node": true,
@@ -23,7 +68,7 @@ type Resourcer interface {
 	Get()
 }
 
-func NewResourcesManager(client *clientset.Client, namespace, resource, name string) *ResourcesManager {
+func NewResourcesManager(action Action, client *clientset.Client, namespace, resource, name string) *ResourcesManager {
 	resourcer := NewResourcer(client, namespace, resource, name)
 	return &ResourcesManager{resourcer: resourcer}
 }
@@ -48,7 +93,7 @@ func NewResourcer(client *clientset.Client, namespace, resource, name string) Re
 	case "ep":
 		resourcer = NewEndPoints(client.ClientSet, namespace, name)
 	default:
-		log.Fatal("[Error] NewResource")
+		log.Fatal("[Error] Unsupported resource type")
 	}
 	return resourcer
 }
@@ -59,4 +104,8 @@ type ResourcesManager struct {
 
 func (rsm *ResourcesManager) Get() {
 	rsm.resourcer.Get()
+}
+
+func (rsm *ResourcesManager) GetLogs() {
+	rsm.resourcer.(*Pods).GetLogs()
 }
