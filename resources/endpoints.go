@@ -21,13 +21,13 @@ func NewEndPoints(clientSet *kubernetes.Clientset, namespace, name string) *EndP
 
 func (ep *EndPoints) Get() {
 	if len(ep.name) > 0 {
-		ep.GetEndPoint()
+		ep.getEndPoint()
 	} else {
-		ep.GetEndPointList()
+		ep.getEndPointList()
 	}
 }
 
-func (ep *EndPoints) GetEndPoint() {
+func (ep *EndPoints) getEndPoint() {
 	endpoint, err := ep.clientSet.CoreV1().Endpoints(ep.namespace).Get(ep.name, metav1.GetOptions{})
 	if err != nil {
 		log.Fatalln("[Error] GetEndPoint()", err.Error())
@@ -35,7 +35,7 @@ func (ep *EndPoints) GetEndPoint() {
 	ep.printEndPoints(endpoint)
 }
 
-func (ep *EndPoints) GetEndPointList() {
+func (ep *EndPoints) getEndPointList() {
 	endpoints, err := ep.clientSet.CoreV1().Endpoints(ep.namespace).List(metav1.ListOptions{})
 	if err != nil {
 		log.Fatalln("[Error] GetEndPoints()", err.Error())

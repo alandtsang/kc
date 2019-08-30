@@ -21,13 +21,13 @@ func NewConfigMaps(clientSet *kubernetes.Clientset, namespace, name string) *Con
 
 func (cm *ConfigMaps) Get() {
 	if len(cm.name) > 0 {
-		cm.GetConfigMap()
+		cm.getConfigMap()
 	} else {
-		cm.GetConfigMapList()
+		cm.getConfigMapList()
 	}
 }
 
-func (cm *ConfigMaps) GetConfigMap() {
+func (cm *ConfigMaps) getConfigMap() {
 	configMap, err := cm.clientSet.CoreV1().ConfigMaps(cm.namespace).Get(cm.name, metav1.GetOptions{})
 	if err != nil {
 		log.Fatalln("[Error] GetConfigMap()", err.Error())
@@ -35,7 +35,7 @@ func (cm *ConfigMaps) GetConfigMap() {
 	cm.printConfigMap(configMap)
 }
 
-func (cm *ConfigMaps) GetConfigMapList() {
+func (cm *ConfigMaps) getConfigMapList() {
 	configMaps, err := cm.clientSet.CoreV1().ConfigMaps(cm.namespace).List(metav1.ListOptions{})
 	if err != nil {
 		log.Fatalln("[Error] GetConfigMaps()", err.Error())

@@ -21,13 +21,13 @@ func NewServiceAccounts(clientSet *kubernetes.Clientset, namespace, name string)
 
 func (sa *ServiceAccounts) Get() {
 	if len(sa.name) > 0 {
-		sa.GetServiceAccount()
+		sa.getServiceAccount()
 	} else {
-		sa.GetServiceAccountList()
+		sa.getServiceAccountList()
 	}
 }
 
-func (sa *ServiceAccounts) GetServiceAccount() {
+func (sa *ServiceAccounts) getServiceAccount() {
 	serviceAccount, err := sa.clientSet.CoreV1().ServiceAccounts(sa.namespace).Get(sa.name, metav1.GetOptions{})
 	if err != nil {
 		log.Fatalln("[Error] GetServiceAccount()", err.Error())
@@ -35,7 +35,7 @@ func (sa *ServiceAccounts) GetServiceAccount() {
 	sa.printServiceAccount(serviceAccount)
 }
 
-func (sa *ServiceAccounts) GetServiceAccountList() {
+func (sa *ServiceAccounts) getServiceAccountList() {
 	serviceAccounts, err := sa.clientSet.CoreV1().ServiceAccounts(sa.namespace).List(metav1.ListOptions{})
 	if err != nil {
 		log.Fatalln("[Error] GetServiceAccountList()", err.Error())

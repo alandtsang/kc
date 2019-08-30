@@ -22,13 +22,13 @@ func NewPods(clientSet *kubernetes.Clientset, namespace, name string) *Pods {
 func (p *Pods) Get() {
 
 	if len(p.name) > 0 {
-		p.GetPod()
+		p.getPod()
 	} else {
-		p.GetPodList()
+		p.getPodList()
 	}
 }
 
-func (p *Pods) GetPod() {
+func (p *Pods) getPod() {
 	pod, err := p.clientSet.CoreV1().Pods(p.namespace).Get(p.name, metav1.GetOptions{})
 	if err != nil {
 		log.Fatalln("[Error] GetPod()", err.Error())
@@ -36,7 +36,7 @@ func (p *Pods) GetPod() {
 	p.printPod(pod)
 }
 
-func (p *Pods) GetPodList() {
+func (p *Pods) getPodList() {
 	// 通过实现 clientset 的 CoreV1Interface 接口列表中的 PodsGetter 接口方法 Pods(namespace string)返回 PodInterface
 	// PodInterface 接口拥有操作 Pod 资源的方法，例如 Create、Update、Get、List 等方法
 
