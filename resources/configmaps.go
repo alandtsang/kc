@@ -23,7 +23,7 @@ func (cm *ConfigMaps) Get() {
 	if len(cm.name) > 0 {
 		cm.GetConfigMap()
 	} else {
-		cm.GetConfigMaps()
+		cm.GetConfigMapList()
 	}
 }
 
@@ -35,7 +35,7 @@ func (cm *ConfigMaps) GetConfigMap() {
 	cm.printConfigMap(configMap)
 }
 
-func (cm *ConfigMaps) GetConfigMaps() {
+func (cm *ConfigMaps) GetConfigMapList() {
 	configMaps, err := cm.clientSet.CoreV1().ConfigMaps(cm.namespace).List(metav1.ListOptions{})
 	if err != nil {
 		log.Fatalln("[Error] GetConfigMaps()", err.Error())
