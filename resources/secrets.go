@@ -10,10 +10,11 @@ import (
 type Secrets struct {
 	clientSet *kubernetes.Clientset
 	namespace string
+	name      string
 }
 
-func NewSecrets(clientSet *kubernetes.Clientset, namespace string) *Secrets {
-	return &Secrets{clientSet: clientSet, namespace: namespace}
+func NewSecrets(clientSet *kubernetes.Clientset, namespace, name string) *Secrets {
+	return &Secrets{clientSet: clientSet, namespace: namespace, name: name}
 }
 
 func (s *Secrets) Get() {

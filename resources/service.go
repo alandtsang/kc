@@ -10,10 +10,11 @@ import (
 type Services struct {
 	clientSet *kubernetes.Clientset
 	namespace string
+	name      string
 }
 
-func NewServices(clientSet *kubernetes.Clientset, namespace string) *Services {
-	return &Services{clientSet: clientSet, namespace: namespace}
+func NewServices(clientSet *kubernetes.Clientset, namespace, name string) *Services {
+	return &Services{clientSet: clientSet, namespace: namespace, name: name}
 }
 
 func (s *Services) Get() {

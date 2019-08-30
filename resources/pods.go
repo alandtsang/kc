@@ -2,6 +2,7 @@ package resources
 
 import (
 	"fmt"
+	"log"
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -11,13 +12,31 @@ import (
 type Pods struct {
 	clientSet *kubernetes.Clientset
 	namespace string
+	name      string
 }
 
-func NewPods(clientSet *kubernetes.Clientset, namespace string) *Pods {
-	return &Pods{clientSet: clientSet, namespace: namespace}
+func NewPods(clientSet *kubernetes.Clientset, namespace, name string) *Pods {
+	return &Pods{clientSet: clientSet, namespace: namespace, name: name}
 }
 
 func (p *Pods) Get() {
+
+	if len(p.name) > 0 {
+		p.GetPod()
+	} else {
+		p.GetPodList()
+	}
+}
+
+func (p *Pods) GetPod() {
+	pod, err := p.clientSet.CoreV1().Pods(p.namespace).Get(p.name, metav1.GetOptions{})
+	if err != nil {
+		log.Fatalln("[Error] GetPod()", err.Error())
+	}
+	p.printPod(pod)
+}
+
+func (p *Pods) GetPodList() {
 	// 通过实现 clientset 的 CoreV1Interface 接口列表中的 PodsGetter 接口方法 Pods(namespace string)返回 PodInterface
 	// PodInterface 接口拥有操作 Pod 资源的方法，例如 Create、Update、Get、List 等方法
 
@@ -25,19 +44,29 @@ func (p *Pods) Get() {
 	// 若指定 namespace 则获取指定 Pod 列表信息
 	pods, err := p.clientSet.CoreV1().Pods(p.namespace).List(metav1.ListOptions{})
 	if err != nil {
-		panic(err)
+		log.Fatalln("[Error] GetPodList()", err.Error())
 	}
+	p.printPodList(pods)
+}
+
+func (p *Pods) printPod(pod *v1.Pod) {
+	fmt.Printf("NAME\t\t\t\t READY\t\t STATUS\t\t RESTARTS\t AGE\n")
+	fmt.Printf("%-30s\t %s\t\t %s\t %-d\t\t %s\n", pod.ObjectMeta.Name, "1/1", getPodStatus(pod), 0, pod.ObjectMeta.CreationTimestamp)
+
+}
+
+func (p *Pods) printPodList(pods *v1.PodList) {
 	if len(pods.Items) > 0 {
 		fmt.Printf("NAME\t\t\t\t READY\t\t STATUS\t\t RESTARTS\t AGE\n")
 		for _, pod := range pods.Items {
-			fmt.Printf("%-30s\t %s\t\t %s\t %-d\t\t %s\n", pod.ObjectMeta.Name, "1/1", getPodStatus(pod), 0, pod.ObjectMeta.CreationTimestamp)
+			fmt.Printf("%-30s\t %s\t\t %s\t %-d\t\t %s\n", pod.ObjectMeta.Name, "1/1", getPodStatus(&pod), 0, pod.ObjectMeta.CreationTimestamp)
 		}
 	} else {
 		fmt.Println(ERR_NO_RESOURCE)
 	}
 }
 
-func getPodStatus(pod v1.Pod) string {
+func getPodStatus(pod *v1.Pod) string {
 	if pod.Status.Phase == "Runnging" {
 		for _, cond := range pod.Status.Conditions {
 			if cond.Status != "True" {

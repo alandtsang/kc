@@ -24,11 +24,11 @@ type Resourcer interface {
 }
 
 func NewResourcesManager(client *clientset.Client, namespace, resource, name string) *ResourcesManager {
-	rss := NewResource(client, namespace, resource)
-	return &ResourcesManager{rss: rss}
+	resourcer := NewResourcer(client, namespace, resource, name)
+	return &ResourcesManager{resourcer: resourcer}
 }
 
-func NewResource(client *clientset.Client, namespace, resource string) Resourcer {
+func NewResourcer(client *clientset.Client, namespace, resource, name string) Resourcer {
 	var resourcer Resourcer
 	switch resource {
 	case "ns":
@@ -36,17 +36,17 @@ func NewResource(client *clientset.Client, namespace, resource string) Resourcer
 	case "node":
 		resourcer = NewNodes(client.ClientSet)
 	case "pod":
-		resourcer = NewPods(client.ClientSet, namespace)
+		resourcer = NewPods(client.ClientSet, namespace, name)
 	case "svc":
-		resourcer = NewPods(client.ClientSet, namespace)
+		resourcer = NewServices(client.ClientSet, namespace, name)
 	case "sa":
-		resourcer = NewPods(client.ClientSet, namespace)
+		resourcer = NewServiceAccounts(client.ClientSet, namespace, name)
 	case "sec":
-		resourcer = NewPods(client.ClientSet, namespace)
+		resourcer = NewSecrets(client.ClientSet, namespace, name)
 	case "cm":
-		resourcer = NewPods(client.ClientSet, namespace)
+		resourcer = NewConfigMaps(client.ClientSet, namespace, name)
 	case "ep":
-		resourcer = NewPods(client.ClientSet, namespace)
+		resourcer = NewEndPoints(client.ClientSet, namespace, name)
 	default:
 		log.Fatal("[Error] NewResource")
 	}
@@ -54,9 +54,9 @@ func NewResource(client *clientset.Client, namespace, resource string) Resourcer
 }
 
 type ResourcesManager struct {
-	rss Resourcer
+	resourcer Resourcer
 }
 
 func (rsm *ResourcesManager) Get() {
-	rsm.rss.Get()
+	rsm.resourcer.Get()
 }

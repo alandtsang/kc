@@ -11,10 +11,11 @@ import (
 type EndPoints struct {
 	clientSet *kubernetes.Clientset
 	namespace string
+	name      string
 }
 
-func NewEndPoints(clientSet *kubernetes.Clientset, namespace string) *EndPoints {
-	return &EndPoints{clientSet: clientSet, namespace: namespace}
+func NewEndPoints(clientSet *kubernetes.Clientset, namespace, name string) *EndPoints {
+	return &EndPoints{clientSet: clientSet, namespace: namespace, name: name}
 }
 
 func (ep *EndPoints) Get() {

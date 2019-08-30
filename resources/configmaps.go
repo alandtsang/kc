@@ -10,10 +10,11 @@ import (
 type ConfigMaps struct {
 	clientSet *kubernetes.Clientset
 	namespace string
+	name      string
 }
 
-func NewConfigMaps(clientSet *kubernetes.Clientset, namespace string) *ConfigMaps {
-	return &ConfigMaps{clientSet: clientSet, namespace: namespace}
+func NewConfigMaps(clientSet *kubernetes.Clientset, namespace, name string) *ConfigMaps {
+	return &ConfigMaps{clientSet: clientSet, namespace: namespace, name: name}
 }
 
 func (cm *ConfigMaps) Get() {
