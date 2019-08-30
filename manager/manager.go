@@ -4,33 +4,24 @@ import (
 	"log"
 
 	"github.com/alandtsang/kc/clientset"
-	"github.com/alandtsang/kc/clusters"
 	"github.com/alandtsang/kc/resources"
 )
 
 type KCManager struct {
-	cs         *clusters.ClusterSet
 	client     *clientset.Client
-	resManager *resources.ResourcesManager
-	namespace  string
 	action     resources.Action
+	namespace  string
+	resManager *resources.ResourcesManager
 }
 
 func (kcm *KCManager) Init(action resources.Action, clusterName, namespace, resource, name string) {
-	kcm.cs = clusters.NewClusterSet()
-	cluster := kcm.cs.GetCluster(clusterName)
-	if cluster == nil {
-		log.Fatalf("[Error] Cluster name %s not found, please enter the correct name\n", clusterName)
-	}
-	//fmt.Printf("%+v\n", *cluster)
-	kcm.client = clientset.NewClient(cluster.Addr, cluster.Token)
+	kcm.client = clientset.NewClient(clusterName)
 	kcm.namespace = namespace
 	kcm.action = action
 	if kcm.action == resources.ActionLogs {
 		resource = "pod"
 	}
 	kcm.resManager = resources.NewResourcesManager(action, kcm.client, namespace, resource, name)
-
 }
 
 func (kcm *KCManager) Do() {

@@ -42,7 +42,7 @@ $ kubectl logs --since=1h nginx`
 // logsCmd represents the logs command
 var logsCmd = &cobra.Command{
 	Use:   "logs",
-	Short: "A brief description of your command",
+	Short: "Print the logs for a container in a pod or specified resource",
 	Long: `Print the logs for a container in a pod or specified resource. If the pod has only one container, the container name is
 optional.`,
 	Example: log_example,

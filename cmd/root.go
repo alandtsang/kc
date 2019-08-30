@@ -31,7 +31,7 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "kc",
-	Short: "A brief description of your application",
+	Short: "kc controls the Kubernetes cluster manager",
 	Long: `kc controls the Kubernetes cluster manager.
 
 Find more information at: https://github.com/alandtsang/kc`,
