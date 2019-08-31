@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	v1 "k8s.io/api/core/v1"
+	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -28,7 +28,12 @@ func (ep *EndPoints) Get() {
 }
 
 func (ep *EndPoints) Delete() {
-
+	err := ep.clientSet.CoreV1().Endpoints(ep.namespace).Delete(ep.name, &metav1.DeleteOptions{})
+	if err != nil {
+		log.Fatalf("[Error] Delete endpoints %s failed: %s\n", ep.name, err.Error())
+	} else {
+		fmt.Printf("endpoints \"%s\" deleted\n", ep.name)
+	}
 }
 
 func (ep *EndPoints) getEndPoint() {
