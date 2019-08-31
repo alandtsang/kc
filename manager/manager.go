@@ -3,34 +3,35 @@ package manager
 import (
 	"log"
 
+	"github.com/alandtsang/kc/action"
 	"github.com/alandtsang/kc/clientset"
 	"github.com/alandtsang/kc/resources"
 )
 
 type KCManager struct {
 	client     *clientset.Client
-	action     resources.Action
+	action     action.Action
 	namespace  string
 	resManager *resources.ResourcesManager
 }
 
-func (kcm *KCManager) Init(action resources.Action, clusterName, namespace, resource, name string) {
+func (kcm *KCManager) Init(act action.Action, clusterName, namespace, resource, name string) {
 	kcm.client = clientset.NewClient(clusterName)
 	kcm.namespace = namespace
-	kcm.action = action
-	if kcm.action == resources.ActionLogs {
+	kcm.action = act
+	if kcm.action == action.ActionLogs {
 		resource = "pod"
 	}
-	kcm.resManager = resources.NewResourcesManager(action, kcm.client, namespace, resource, name)
+	kcm.resManager = resources.NewResourcesManager(kcm.client, namespace, resource, name)
 }
 
 func (kcm *KCManager) Do() {
 	switch kcm.action {
-	case resources.ActionGet:
+	case action.ActionGet:
 		kcm.GetResource()
-	case resources.ActionLogs:
+	case action.ActionLogs:
 		kcm.GetLogs()
-	case resources.ActionDelete:
+	case action.ActionDelete:
 		kcm.DeleteResource()
 	default:
 		log.Fatalln("Wrong Action")

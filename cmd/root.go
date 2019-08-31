@@ -20,6 +20,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/alandtsang/kc/action"
 	"github.com/alandtsang/kc/manager"
 	"github.com/alandtsang/kc/resources"
 	"github.com/mitchellh/go-homedir"
@@ -90,11 +91,11 @@ func initConfig() {
 	}
 }
 
-func NewKCManager(action resources.Action, namespace, resource, name string) {
-	fmt.Printf("action: %v, namespace: %s, resource: %s, name: %s\n", action, namespace, resource, name)
+func NewKCManager(act action.Action, namespace, resource, name string) {
+	fmt.Printf("action: %v, namespace: %s, resource: %s, name: %s\n", act, namespace, resource, name)
 	clusterName := "k8s-test2"
 	var kcmanager manager.KCManager
-	kcmanager.Init(action, clusterName, namespace, resource, name)
+	kcmanager.Init(act, clusterName, namespace, resource, name)
 	kcmanager.Do()
 }
 
@@ -111,7 +112,7 @@ func validate(args []string) {
 	}
 }
 
-func do(action resources.Action, namespace string, args []string) {
+func do(action action.Action, namespace string, args []string) {
 	var resource, name string
 	resource = args[0]
 	if len(args) == 2 {

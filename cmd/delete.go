@@ -16,9 +16,11 @@ limitations under the License.
 package cmd
 
 import (
+	"log"
+
+	"github.com/alandtsang/kc/action"
 	"github.com/alandtsang/kc/resources"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 // deleteCmd represents the delete command
@@ -40,7 +42,7 @@ the --force flag.`,
 		namespace, _ := cmd.Flags().GetString("namespace")
 		getArgs := cmd.Flags().Args()
 		deleteValidate(getArgs)
-		do(resources.ActionDelete, namespace, getArgs)
+		do(action.ActionDelete, namespace, getArgs)
 	},
 }
 

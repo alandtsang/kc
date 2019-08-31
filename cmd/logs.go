@@ -18,7 +18,7 @@ package cmd
 import (
 	"log"
 
-	"github.com/alandtsang/kc/resources"
+	"github.com/alandtsang/kc/action"
 	"github.com/spf13/cobra"
 )
 
@@ -79,5 +79,5 @@ func logsValidate(args []string) {
 
 func logsDo(namespace string, args []string) {
 	podName := args[0]
-	NewKCManager(resources.ActionLogs, namespace, "", podName)
+	NewKCManager(action.ActionLogs, namespace, "", podName)
 }

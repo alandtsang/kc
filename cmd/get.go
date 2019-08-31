@@ -16,7 +16,7 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/alandtsang/kc/resources"
+	"github.com/alandtsang/kc/action"
 	"github.com/spf13/cobra"
 )
 
@@ -79,7 +79,7 @@ var getCmd = &cobra.Command{
 		namespace, _ := cmd.Flags().GetString("namespace")
 		getArgs := cmd.Flags().Args()
 		validate(getArgs)
-		do(resources.ActionGet, namespace, getArgs)
+		do(action.ActionGet, namespace, getArgs)
 	},
 }
 
