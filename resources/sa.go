@@ -28,7 +28,12 @@ func (sa *ServiceAccounts) Get() {
 }
 
 func (sa *ServiceAccounts) Delete() {
-
+	err := sa.clientSet.CoreV1().ServiceAccounts(sa.namespace).Delete(sa.name, &metav1.DeleteOptions{})
+	if err != nil {
+		log.Fatalf("[Error] Delete service account %s failed: %s\n", sa.name, err.Error())
+	} else {
+		fmt.Printf("service account \"%s\" deleted\n", sa.name)
+	}
 }
 
 func (sa *ServiceAccounts) getServiceAccount() {

@@ -28,7 +28,12 @@ func (s *Services) Get() {
 }
 
 func (s *Services) Delete() {
-
+	err := s.clientSet.CoreV1().Services(s.namespace).Delete(s.name, &metav1.DeleteOptions{})
+	if err != nil {
+		log.Fatalf("[Error] Delete service %s failed: %s\n", s.name, err.Error())
+	} else {
+		fmt.Printf("service \"%s\" deleted\n", s.name)
+	}
 }
 
 func (s *Services) getService() {

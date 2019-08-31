@@ -28,7 +28,12 @@ func (s *Secrets) Get() {
 }
 
 func (s *Secrets) Delete() {
-
+	err := s.clientSet.CoreV1().Secrets(s.namespace).Delete(s.name, &metav1.DeleteOptions{})
+	if err != nil {
+		log.Fatalf("[Error] Delete secret %s failed: %s\n", s.name, err.Error())
+	} else {
+		fmt.Printf("secret \"%s\" deleted\n", s.name)
+	}
 }
 
 func (s *Secrets) getSecret() {
