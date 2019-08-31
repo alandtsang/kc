@@ -30,7 +30,12 @@ func (p *Pods) Get() {
 }
 
 func (p *Pods) Delete() {
-
+	err := p.clientSet.CoreV1().Pods(p.namespace).Delete(p.name, &metav1.DeleteOptions{})
+	if err != nil {
+		log.Fatalf("[Error] Delete pod %s failed: %s\n", p.name, err.Error())
+	} else {
+		fmt.Printf("pod \"%s\" deleted\n", p.name)
+	}
 }
 
 func (p *Pods) GetLogs() {
