@@ -10,10 +10,11 @@ import (
 
 type Namespaces struct {
 	clientSet *kubernetes.Clientset
+	name      string
 }
 
-func NewNamespaces(clientSet *kubernetes.Clientset) Resourcer {
-	return &Namespaces{clientSet: clientSet}
+func NewNamespaces(clientSet *kubernetes.Clientset, name string) Resourcer {
+	return &Namespaces{clientSet: clientSet, name: name}
 }
 
 func (n *Namespaces) Get() {
@@ -25,5 +26,14 @@ func (n *Namespaces) Get() {
 	fmt.Printf("NAME\t\t\t\t STATUS\t\t AGE\n")
 	for _, namespace := range namespaces.Items {
 		fmt.Printf("%-30s\t %s\t\t %s\n", namespace.Name, namespace.Status.Phase, namespace.CreationTimestamp)
+	}
+}
+
+func (n *Namespaces) Delete() {
+	err := n.clientSet.CoreV1().Namespaces().Delete(n.name, &metav1.DeleteOptions{})
+	if err != nil {
+		log.Fatalf("[Error] Delete namespace %s failed: %s\n", n.name, err.Error())
+	} else {
+		fmt.Printf("namespace \"%s\" deleted\n", n.name)
 	}
 }

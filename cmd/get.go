@@ -16,8 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"log"
-
 	"github.com/alandtsang/kc/resources"
 	"github.com/spf13/cobra"
 )
@@ -81,7 +79,7 @@ var getCmd = &cobra.Command{
 		namespace, _ := cmd.Flags().GetString("namespace")
 		getArgs := cmd.Flags().Args()
 		validate(getArgs)
-		do(namespace, getArgs)
+		do(resources.ActionGet, namespace, getArgs)
 	},
 }
 
@@ -89,26 +87,4 @@ func init() {
 	rootCmd.AddCommand(getCmd)
 	getCmd.Flags().StringP("namespace", "n", "default", "help for namespace")
 	getCmd.Flags().StringP("output", "o", "", "help for output")
-}
-
-func validate(args []string) {
-	argsLen := len(args)
-	if argsLen == 0 {
-		log.Fatalln("[Error] Empty resource names are not allowed")
-	} else if argsLen > 2 {
-		log.Fatalln("[Error] Too many parameters are not allowed")
-	}
-
-	if _, ok := resources.ResourcesLists[args[0]]; !ok {
-		log.Fatalf("[Error] Resource name %s are not allowed\n", args[0])
-	}
-}
-
-func do(namespace string, args []string) {
-	var resource, name string
-	resource = args[0]
-	if len(args) == 2 {
-		name = args[1]
-	}
-	NewKCManager(resources.ActionGet, namespace, resource, name)
 }

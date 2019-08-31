@@ -31,3 +31,7 @@ func (n *Nodes) Get() {
 		fmt.Println(ERR_NO_RESOURCE)
 	}
 }
+
+func (n *Nodes) Delete() {
+
+}

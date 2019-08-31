@@ -66,6 +66,7 @@ var ResourcesLists = map[string]bool{
 
 type Resourcer interface {
 	Get()
+	Delete()
 }
 
 func NewResourcesManager(action Action, client *clientset.Client, namespace, resource, name string) *ResourcesManager {
@@ -77,7 +78,7 @@ func NewResourcer(client *clientset.Client, namespace, resource, name string) Re
 	var resourcer Resourcer
 	switch resource {
 	case "ns":
-		resourcer = NewNamespaces(client.ClientSet)
+		resourcer = NewNamespaces(client.ClientSet, name)
 	case "node":
 		resourcer = NewNodes(client.ClientSet)
 	case "pod":
@@ -108,4 +109,8 @@ func (rsm *ResourcesManager) Get() {
 
 func (rsm *ResourcesManager) GetLogs() {
 	rsm.resourcer.(*Pods).GetLogs()
+}
+
+func (rsm *ResourcesManager) Delete() {
+	rsm.resourcer.Delete()
 }

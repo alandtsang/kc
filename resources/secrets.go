@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	v1 "k8s.io/api/core/v1"
+	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -25,6 +25,10 @@ func (s *Secrets) Get() {
 	} else {
 		s.getSecretList()
 	}
+}
+
+func (s *Secrets) Delete() {
+
 }
 
 func (s *Secrets) getSecret() {

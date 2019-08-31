@@ -27,6 +27,10 @@ func (sa *ServiceAccounts) Get() {
 	}
 }
 
+func (sa *ServiceAccounts) Delete() {
+
+}
+
 func (sa *ServiceAccounts) getServiceAccount() {
 	serviceAccount, err := sa.clientSet.CoreV1().ServiceAccounts(sa.namespace).Get(sa.name, metav1.GetOptions{})
 	if err != nil {

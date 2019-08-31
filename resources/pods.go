@@ -6,7 +6,7 @@ import (
 	"io"
 	"log"
 
-	v1 "k8s.io/api/core/v1"
+	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -27,6 +27,10 @@ func (p *Pods) Get() {
 	} else {
 		p.getPodList()
 	}
+}
+
+func (p *Pods) Delete() {
+
 }
 
 func (p *Pods) GetLogs() {

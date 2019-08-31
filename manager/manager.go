@@ -30,6 +30,8 @@ func (kcm *KCManager) Do() {
 		kcm.GetResource()
 	case resources.ActionLogs:
 		kcm.GetLogs()
+	case resources.ActionDelete:
+		kcm.DeleteResource()
 	default:
 		log.Fatalln("Wrong Action")
 	}
@@ -41,4 +43,8 @@ func (kcm *KCManager) GetResource() {
 
 func (kcm *KCManager) GetLogs() {
 	kcm.resManager.GetLogs()
+}
+
+func (kcm *KCManager) DeleteResource() {
+	kcm.resManager.Delete()
 }

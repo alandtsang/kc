@@ -14,7 +14,7 @@ require (
 	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/crypto v0.0.0-20190829043050-9756ffdc2472 // indirect
 	golang.org/x/net v0.0.0-20190827160401-ba9fcec4b297 // indirect
-	golang.org/x/sys v0.0.0-20190826190057-c7b8b68b1456 // indirect
+	golang.org/x/sys v0.0.0-20190830142957-1e83adbbebd0 // indirect
 	google.golang.org/appengine v1.6.2 // indirect
 	k8s.io/api v0.0.0-20190829034738-40d3837b7e3d
 	k8s.io/apimachinery v0.0.0-20190828114620-4147c925140e

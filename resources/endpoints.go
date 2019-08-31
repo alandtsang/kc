@@ -27,6 +27,10 @@ func (ep *EndPoints) Get() {
 	}
 }
 
+func (ep *EndPoints) Delete() {
+
+}
+
 func (ep *EndPoints) getEndPoint() {
 	endpoint, err := ep.clientSet.CoreV1().Endpoints(ep.namespace).Get(ep.name, metav1.GetOptions{})
 	if err != nil {

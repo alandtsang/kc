@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/alandtsang/kc/manager"
@@ -95,4 +96,26 @@ func NewKCManager(action resources.Action, namespace, resource, name string) {
 	var kcmanager manager.KCManager
 	kcmanager.Init(action, clusterName, namespace, resource, name)
 	kcmanager.Do()
+}
+
+func validate(args []string) {
+	argsLen := len(args)
+	if argsLen == 0 {
+		log.Fatalln("[Error] Empty resource are not allowed")
+	} else if argsLen > 2 {
+		log.Fatalln("[Error] Too many parameters are not allowed")
+	}
+
+	if _, ok := resources.ResourcesLists[args[0]]; !ok {
+		log.Fatalf("[Error] Resource name %s are not allowed\n", args[0])
+	}
+}
+
+func do(action resources.Action, namespace string, args []string) {
+	var resource, name string
+	resource = args[0]
+	if len(args) == 2 {
+		name = args[1]
+	}
+	NewKCManager(action, namespace, resource, name)
 }
