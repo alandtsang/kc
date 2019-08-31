@@ -48,6 +48,7 @@ the --force flag.`,
 
 func init() {
 	rootCmd.AddCommand(deleteCmd)
+	deleteCmd.Flags().StringP("namespace", "n", "default", "help for namespace")
 	deleteCmd.Flags().StringP("filename", "f", "", "help for filename")
 }
 

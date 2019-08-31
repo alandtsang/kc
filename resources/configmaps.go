@@ -28,7 +28,12 @@ func (cm *ConfigMaps) Get() {
 }
 
 func (cm *ConfigMaps) Delete() {
-
+	err := cm.clientSet.CoreV1().ConfigMaps(cm.namespace).Delete(cm.name, &metav1.DeleteOptions{})
+	if err != nil {
+		log.Fatalf("[Error] Delete configmaps %s failed: %s\n", cm.name, err.Error())
+	} else {
+		fmt.Printf("configmaps \"%s\" deleted\n", cm.name)
+	}
 }
 
 func (cm *ConfigMaps) getConfigMap() {

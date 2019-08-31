@@ -32,22 +32,22 @@ func NewResourcesManager(client *clientset.Client, namespace, resource, name str
 func NewResourcer(client *clientset.Client, namespace, resource, name string) Resourcer {
 	var resourcer Resourcer
 	switch resource {
+	case "cm":
+		resourcer = NewConfigMaps(client.ClientSet, namespace, name)
+	case "ep":
+		resourcer = NewEndPoints(client.ClientSet, namespace, name)
 	case "ns":
 		resourcer = NewNamespaces(client.ClientSet, name)
 	case "node":
 		resourcer = NewNodes(client.ClientSet)
 	case "pod":
 		resourcer = NewPods(client.ClientSet, namespace, name)
-	case "svc":
-		resourcer = NewServices(client.ClientSet, namespace, name)
 	case "sa":
 		resourcer = NewServiceAccounts(client.ClientSet, namespace, name)
 	case "sec":
 		resourcer = NewSecrets(client.ClientSet, namespace, name)
-	case "cm":
-		resourcer = NewConfigMaps(client.ClientSet, namespace, name)
-	case "ep":
-		resourcer = NewEndPoints(client.ClientSet, namespace, name)
+	case "svc":
+		resourcer = NewServices(client.ClientSet, namespace, name)
 	default:
 		log.Fatal("[Error] Unsupported resource type")
 	}
